@@ -11,13 +11,13 @@ public class SimpleChatUI : MonoBehaviour
 
     private void Start()
     {
-        NetworkManager.Instance.ChatServer.Connect("127.0.0.1", 12345);
         NetworkManager.Instance.ChatServer.OnReceiveMessage += message =>
         {
             if (m_TextMessages == null) return;
             m_TextMessages.text += '\n';
             m_TextMessages.text += message;
         };
+        NetworkManager.Instance.ChatServer.Connect("127.0.0.1", 12345);
     }
 
     public void OnClick_SendInput()
