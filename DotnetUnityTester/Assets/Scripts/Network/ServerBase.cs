@@ -70,4 +70,9 @@ public abstract class ServerBase : MonoBehaviour
         while(m_QueuedMessages.Count > 0)
             OnProcessReceivedPacket(m_QueuedMessages.Dequeue());
     }
+
+    protected virtual void OnDestroy()
+    {
+        Disconnect();
+    }
 }

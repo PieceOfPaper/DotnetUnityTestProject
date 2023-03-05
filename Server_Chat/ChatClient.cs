@@ -28,11 +28,11 @@ namespace Server_Chat
                 var message = Encoding.UTF8.GetString(m_Buffer, 0, m_BytesRead);
                 Console.WriteLine($"Received message: {message}");
 
-                // SendMessage(message);
                 ChatClientManager.Instance.BrodcastMessage(message);
             }
             else
             {
+                Console.WriteLine($"Disconnect {Handle}");
                 m_NetworkStream.Close();
                 ChatClientManager.Instance.RemoveChatClient(Handle);
                 TcpClientManager.Instance.RemoveTcpClient(Handle);
