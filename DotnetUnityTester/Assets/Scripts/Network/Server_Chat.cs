@@ -11,6 +11,7 @@ public class Server_Chat : ServerBase
     {
         [System.NonSerialized] public bool IsValid;
 
+        public int timestamp;
         public string nickname;
         public string message;
     }

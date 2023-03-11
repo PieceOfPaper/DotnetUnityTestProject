@@ -2,6 +2,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using Newtonsoft.Json.Linq;
 
 namespace Server_Chat
 {
@@ -25,10 +26,13 @@ namespace Server_Chat
             m_BytesRead = await m_NetworkStream.ReadAsync(m_Buffer, 0, m_Buffer.Length);
             if (m_BytesRead > 0)
             {
-                var message = Encoding.UTF8.GetString(m_Buffer, 0, m_BytesRead);
-                Console.WriteLine($"Received message: {message}");
+                var json = Encoding.UTF8.GetString(m_Buffer, 0, m_BytesRead);
+                Console.WriteLine($"Received message: {json}");
 
-                ChatClientManager.Instance.BrodcastMessage(message);
+                JObject jObj = JObject.Parse(json);
+                jObj["timestamp"] = ((DateTimeOffset)System.DateTime.UtcNow).ToUnixTimeSeconds();
+
+                ChatClientManager.Instance.BrodcastMessage(jObj.ToString());
             }
             else
             {
