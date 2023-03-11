@@ -11,7 +11,9 @@ public class Server_Chat : ServerBase
     {
         [System.NonSerialized] public bool IsValid;
 
+        public int errorCode;
         public int timestamp;
+        public int channelID;
         public string nickname;
         public string message;
     }
