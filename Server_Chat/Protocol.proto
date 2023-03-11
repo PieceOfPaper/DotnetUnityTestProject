@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+message PlayerData {
+  int32 playerId = 1;
+  string playerName = 2;
+  int32 playerLevel = 3;
+}
+
+message ChatMessage {
+    int32 errorCode = 1;
+    int32 type = 2;
+    string jsonData = 3;
+}

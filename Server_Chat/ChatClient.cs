@@ -30,9 +30,22 @@ namespace Server_Chat
                 Console.WriteLine($"Received message: {json}");
 
                 JObject jObj = JObject.Parse(json);
-                jObj["timestamp"] = ((DateTimeOffset)System.DateTime.UtcNow).ToUnixTimeSeconds();
+                if (jObj != null)
+                {
+                    jObj["timestamp"] = ((DateTimeOffset)System.DateTime.UtcNow).ToUnixTimeSeconds();
 
-                ChatClientManager.Instance.BrodcastMessage(jObj.ToString());
+                    int channelID = 0;
+                    string? channelIDStr = jObj.Value<string>("channelID");
+                    int.TryParse(channelIDStr, out channelID);
+
+                    ChatClientManager.Instance.BrodcastMessage(jObj.ToString());
+                }
+                else
+                {
+                    jObj = new JObject();
+                    jObj["errorCode"] = 1;
+                    SendMessage(jObj.ToString());
+                }
             }
             else
             {

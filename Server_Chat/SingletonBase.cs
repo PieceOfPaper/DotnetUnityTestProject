@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public abstract class SingletonTemplate<T> where T : class, new()
 {
-    static T m_Instance = null;
+    static T? m_Instance = null;
     public static T Instance
     {
         get
