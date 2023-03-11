@@ -11,11 +11,11 @@ public class SimpleChatUI : MonoBehaviour
 
     private void Start()
     {
-        NetworkManager.Instance.ChatServer.OnReceiveMessage += message =>
+        NetworkManager.Instance.ChatServer.OnReceiveMessage += packet =>
         {
             if (m_TextMessages == null) return;
             m_TextMessages.text += '\n';
-            m_TextMessages.text += message;
+            m_TextMessages.text += packet.message;
         };
         NetworkManager.Instance.ChatServer.Connect("127.0.0.1", 12345);
     }
@@ -25,6 +25,10 @@ public class SimpleChatUI : MonoBehaviour
         if (string.IsNullOrEmpty(m_InputField.text))
             return;
 
-        NetworkManager.Instance.ChatServer.SendChatMessage(m_InputField.text);
+        NetworkManager.Instance.ChatServer.SendChatMessage(new Server_Chat.ChatPacket()
+        {
+            nickname = "", //TODO
+            message = m_InputField.text,
+        });
     }
 }
