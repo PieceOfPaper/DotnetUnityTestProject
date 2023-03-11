@@ -14,11 +14,12 @@ public class SimpleChatUI : MonoBehaviour
     {
         NetworkManager.Instance.ChatServer.OnReceiveMessage += packet =>
         {
+            if (packet == null) return;
             if (m_TextMessages == null) return;
 
-            var dateTime = new System.DateTime(1970, 1, 1, 0, 0, 0).Add(System.TimeZoneInfo.Local.BaseUtcOffset).AddSeconds(packet.timestamp);
+            var dateTime = new System.DateTime(1970, 1, 1, 0, 0, 0).Add(System.TimeZoneInfo.Local.BaseUtcOffset).AddSeconds(packet.Timestamp);
             m_TextMessages.text += '\n';
-            m_TextMessages.text += string.Format("[{0}] {1}\n{2}", dateTime, packet.nickname, packet.message);
+            m_TextMessages.text += string.Format("[{0}] {1}\n{2}", dateTime, packet.Nickname, packet.Message);
         };
         NetworkManager.Instance.ChatServer.Connect("127.0.0.1", 12345);
     }
@@ -28,10 +29,10 @@ public class SimpleChatUI : MonoBehaviour
         if (string.IsNullOrEmpty(m_InputField.text))
             return;
 
-        NetworkManager.Instance.ChatServer.SendChatMessage(new Server_Chat.ChatPacket()
-        {
-            nickname = m_InputNickname == null || string.IsNullOrWhiteSpace(m_InputNickname.text) ? "Unknown" : m_InputNickname.text,
-            message = m_InputField.text,
-        });
+        NetworkManager.Instance.ChatServer.SendChatMessage(
+            0,
+            m_InputNickname == null || string.IsNullOrWhiteSpace(m_InputNickname.text) ? "Unknown" : m_InputNickname.text,
+            m_InputField.text,
+            null);
     }
 }

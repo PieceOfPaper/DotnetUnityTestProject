@@ -23,11 +23,11 @@ namespace Server_Chat
             return true;
         }
 
-        public void BrodcastMessage(string message)
+        public void BrodcastMessage(ChatClient client, ChatMessage chatMessage)
         {
             foreach (var chatClient in m_DicChatClients.Values)
             {
-                chatClient.SendMessage(message);
+                chatClient.SendMessage(chatMessage);
             }
         }
     }

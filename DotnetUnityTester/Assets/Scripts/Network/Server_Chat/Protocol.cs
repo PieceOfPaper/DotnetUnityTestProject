@@ -22,284 +22,20 @@ public static partial class ProtocolReflection {
   static ProtocolReflection() {
     byte[] descriptorData = global::System.Convert.FromBase64String(
         string.Concat(
-          "Cg5Qcm90b2NvbC5wcm90byJHCgpQbGF5ZXJEYXRhEhAKCHBsYXllcklkGAEg",
-          "ASgFEhIKCnBsYXllck5hbWUYAiABKAkSEwoLcGxheWVyTGV2ZWwYAyABKAUi",
-          "QAoLQ2hhdE1lc3NhZ2USEQoJZXJyb3JDb2RlGAEgASgFEgwKBHR5cGUYAiAB",
-          "KAUSEAoIanNvbkRhdGEYAyABKAliBnByb3RvMw=="));
+          "Cg5Qcm90b2NvbC5wcm90byJ7CgtDaGF0TWVzc2FnZRIRCgllcnJvckNvZGUY",
+          "ASABKAUSDAoEdHlwZRgCIAEoBRIRCgl0aW1lc3RhbXAYAyABKAMSEAoIbmlj",
+          "a25hbWUYBCABKAkSDwoHbWVzc2FnZRgFIAEoCRIVCg1vdGhlckpzb25EYXRh",
+          "GAYgASgJYgZwcm90bzM="));
     descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
         new pbr::FileDescriptor[] { },
         new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-          new pbr::GeneratedClrTypeInfo(typeof(global::PlayerData), global::PlayerData.Parser, new[]{ "PlayerId", "PlayerName", "PlayerLevel" }, null, null, null, null),
-          new pbr::GeneratedClrTypeInfo(typeof(global::ChatMessage), global::ChatMessage.Parser, new[]{ "ErrorCode", "Type", "JsonData" }, null, null, null, null)
+          new pbr::GeneratedClrTypeInfo(typeof(global::ChatMessage), global::ChatMessage.Parser, new[]{ "ErrorCode", "Type", "Timestamp", "Nickname", "Message", "OtherJsonData" }, null, null, null, null)
         }));
   }
   #endregion
 
 }
 #region Messages
-public sealed partial class PlayerData : pb::IMessage<PlayerData>
-#if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    , pb::IBufferMessage
-#endif
-{
-  private static readonly pb::MessageParser<PlayerData> _parser = new pb::MessageParser<PlayerData>(() => new PlayerData());
-  private pb::UnknownFieldSet _unknownFields;
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public static pb::MessageParser<PlayerData> Parser { get { return _parser; } }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public static pbr::MessageDescriptor Descriptor {
-    get { return global::ProtocolReflection.Descriptor.MessageTypes[0]; }
-  }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  pbr::MessageDescriptor pb::IMessage.Descriptor {
-    get { return Descriptor; }
-  }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public PlayerData() {
-    OnConstruction();
-  }
-
-  partial void OnConstruction();
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public PlayerData(PlayerData other) : this() {
-    playerId_ = other.playerId_;
-    playerName_ = other.playerName_;
-    playerLevel_ = other.playerLevel_;
-    _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-  }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public PlayerData Clone() {
-    return new PlayerData(this);
-  }
-
-  /// <summary>Field number for the "playerId" field.</summary>
-  public const int PlayerIdFieldNumber = 1;
-  private int playerId_;
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public int PlayerId {
-    get { return playerId_; }
-    set {
-      playerId_ = value;
-    }
-  }
-
-  /// <summary>Field number for the "playerName" field.</summary>
-  public const int PlayerNameFieldNumber = 2;
-  private string playerName_ = "";
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public string PlayerName {
-    get { return playerName_; }
-    set {
-      playerName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-    }
-  }
-
-  /// <summary>Field number for the "playerLevel" field.</summary>
-  public const int PlayerLevelFieldNumber = 3;
-  private int playerLevel_;
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public int PlayerLevel {
-    get { return playerLevel_; }
-    set {
-      playerLevel_ = value;
-    }
-  }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public override bool Equals(object other) {
-    return Equals(other as PlayerData);
-  }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public bool Equals(PlayerData other) {
-    if (ReferenceEquals(other, null)) {
-      return false;
-    }
-    if (ReferenceEquals(other, this)) {
-      return true;
-    }
-    if (PlayerId != other.PlayerId) return false;
-    if (PlayerName != other.PlayerName) return false;
-    if (PlayerLevel != other.PlayerLevel) return false;
-    return Equals(_unknownFields, other._unknownFields);
-  }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public override int GetHashCode() {
-    int hash = 1;
-    if (PlayerId != 0) hash ^= PlayerId.GetHashCode();
-    if (PlayerName.Length != 0) hash ^= PlayerName.GetHashCode();
-    if (PlayerLevel != 0) hash ^= PlayerLevel.GetHashCode();
-    if (_unknownFields != null) {
-      hash ^= _unknownFields.GetHashCode();
-    }
-    return hash;
-  }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public override string ToString() {
-    return pb::JsonFormatter.ToDiagnosticString(this);
-  }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public void WriteTo(pb::CodedOutputStream output) {
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    output.WriteRawMessage(this);
-  #else
-    if (PlayerId != 0) {
-      output.WriteRawTag(8);
-      output.WriteInt32(PlayerId);
-    }
-    if (PlayerName.Length != 0) {
-      output.WriteRawTag(18);
-      output.WriteString(PlayerName);
-    }
-    if (PlayerLevel != 0) {
-      output.WriteRawTag(24);
-      output.WriteInt32(PlayerLevel);
-    }
-    if (_unknownFields != null) {
-      _unknownFields.WriteTo(output);
-    }
-  #endif
-  }
-
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-    if (PlayerId != 0) {
-      output.WriteRawTag(8);
-      output.WriteInt32(PlayerId);
-    }
-    if (PlayerName.Length != 0) {
-      output.WriteRawTag(18);
-      output.WriteString(PlayerName);
-    }
-    if (PlayerLevel != 0) {
-      output.WriteRawTag(24);
-      output.WriteInt32(PlayerLevel);
-    }
-    if (_unknownFields != null) {
-      _unknownFields.WriteTo(ref output);
-    }
-  }
-  #endif
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public int CalculateSize() {
-    int size = 0;
-    if (PlayerId != 0) {
-      size += 1 + pb::CodedOutputStream.ComputeInt32Size(PlayerId);
-    }
-    if (PlayerName.Length != 0) {
-      size += 1 + pb::CodedOutputStream.ComputeStringSize(PlayerName);
-    }
-    if (PlayerLevel != 0) {
-      size += 1 + pb::CodedOutputStream.ComputeInt32Size(PlayerLevel);
-    }
-    if (_unknownFields != null) {
-      size += _unknownFields.CalculateSize();
-    }
-    return size;
-  }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public void MergeFrom(PlayerData other) {
-    if (other == null) {
-      return;
-    }
-    if (other.PlayerId != 0) {
-      PlayerId = other.PlayerId;
-    }
-    if (other.PlayerName.Length != 0) {
-      PlayerName = other.PlayerName;
-    }
-    if (other.PlayerLevel != 0) {
-      PlayerLevel = other.PlayerLevel;
-    }
-    _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-  }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public void MergeFrom(pb::CodedInputStream input) {
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    input.ReadRawMessage(this);
-  #else
-    uint tag;
-    while ((tag = input.ReadTag()) != 0) {
-      switch(tag) {
-        default:
-          _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-          break;
-        case 8: {
-          PlayerId = input.ReadInt32();
-          break;
-        }
-        case 18: {
-          PlayerName = input.ReadString();
-          break;
-        }
-        case 24: {
-          PlayerLevel = input.ReadInt32();
-          break;
-        }
-      }
-    }
-  #endif
-  }
-
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-    uint tag;
-    while ((tag = input.ReadTag()) != 0) {
-      switch(tag) {
-        default:
-          _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-          break;
-        case 8: {
-          PlayerId = input.ReadInt32();
-          break;
-        }
-        case 18: {
-          PlayerName = input.ReadString();
-          break;
-        }
-        case 24: {
-          PlayerLevel = input.ReadInt32();
-          break;
-        }
-      }
-    }
-  }
-  #endif
-
-}
-
 public sealed partial class ChatMessage : pb::IMessage<ChatMessage>
 #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     , pb::IBufferMessage
@@ -314,7 +50,7 @@ public sealed partial class ChatMessage : pb::IMessage<ChatMessage>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public static pbr::MessageDescriptor Descriptor {
-    get { return global::ProtocolReflection.Descriptor.MessageTypes[1]; }
+    get { return global::ProtocolReflection.Descriptor.MessageTypes[0]; }
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -336,7 +72,10 @@ public sealed partial class ChatMessage : pb::IMessage<ChatMessage>
   public ChatMessage(ChatMessage other) : this() {
     errorCode_ = other.errorCode_;
     type_ = other.type_;
-    jsonData_ = other.jsonData_;
+    timestamp_ = other.timestamp_;
+    nickname_ = other.nickname_;
+    message_ = other.message_;
+    otherJsonData_ = other.otherJsonData_;
     _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
   }
 
@@ -370,15 +109,51 @@ public sealed partial class ChatMessage : pb::IMessage<ChatMessage>
     }
   }
 
-  /// <summary>Field number for the "jsonData" field.</summary>
-  public const int JsonDataFieldNumber = 3;
-  private string jsonData_ = "";
+  /// <summary>Field number for the "timestamp" field.</summary>
+  public const int TimestampFieldNumber = 3;
+  private long timestamp_;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-  public string JsonData {
-    get { return jsonData_; }
+  public long Timestamp {
+    get { return timestamp_; }
     set {
-      jsonData_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      timestamp_ = value;
+    }
+  }
+
+  /// <summary>Field number for the "nickname" field.</summary>
+  public const int NicknameFieldNumber = 4;
+  private string nickname_ = "";
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public string Nickname {
+    get { return nickname_; }
+    set {
+      nickname_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+    }
+  }
+
+  /// <summary>Field number for the "message" field.</summary>
+  public const int MessageFieldNumber = 5;
+  private string message_ = "";
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public string Message {
+    get { return message_; }
+    set {
+      message_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+    }
+  }
+
+  /// <summary>Field number for the "otherJsonData" field.</summary>
+  public const int OtherJsonDataFieldNumber = 6;
+  private string otherJsonData_ = "";
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public string OtherJsonData {
+    get { return otherJsonData_; }
+    set {
+      otherJsonData_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
     }
   }
 
@@ -399,7 +174,10 @@ public sealed partial class ChatMessage : pb::IMessage<ChatMessage>
     }
     if (ErrorCode != other.ErrorCode) return false;
     if (Type != other.Type) return false;
-    if (JsonData != other.JsonData) return false;
+    if (Timestamp != other.Timestamp) return false;
+    if (Nickname != other.Nickname) return false;
+    if (Message != other.Message) return false;
+    if (OtherJsonData != other.OtherJsonData) return false;
     return Equals(_unknownFields, other._unknownFields);
   }
 
@@ -409,7 +187,10 @@ public sealed partial class ChatMessage : pb::IMessage<ChatMessage>
     int hash = 1;
     if (ErrorCode != 0) hash ^= ErrorCode.GetHashCode();
     if (Type != 0) hash ^= Type.GetHashCode();
-    if (JsonData.Length != 0) hash ^= JsonData.GetHashCode();
+    if (Timestamp != 0L) hash ^= Timestamp.GetHashCode();
+    if (Nickname.Length != 0) hash ^= Nickname.GetHashCode();
+    if (Message.Length != 0) hash ^= Message.GetHashCode();
+    if (OtherJsonData.Length != 0) hash ^= OtherJsonData.GetHashCode();
     if (_unknownFields != null) {
       hash ^= _unknownFields.GetHashCode();
     }
@@ -436,9 +217,21 @@ public sealed partial class ChatMessage : pb::IMessage<ChatMessage>
       output.WriteRawTag(16);
       output.WriteInt32(Type);
     }
-    if (JsonData.Length != 0) {
-      output.WriteRawTag(26);
-      output.WriteString(JsonData);
+    if (Timestamp != 0L) {
+      output.WriteRawTag(24);
+      output.WriteInt64(Timestamp);
+    }
+    if (Nickname.Length != 0) {
+      output.WriteRawTag(34);
+      output.WriteString(Nickname);
+    }
+    if (Message.Length != 0) {
+      output.WriteRawTag(42);
+      output.WriteString(Message);
+    }
+    if (OtherJsonData.Length != 0) {
+      output.WriteRawTag(50);
+      output.WriteString(OtherJsonData);
     }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(output);
@@ -458,9 +251,21 @@ public sealed partial class ChatMessage : pb::IMessage<ChatMessage>
       output.WriteRawTag(16);
       output.WriteInt32(Type);
     }
-    if (JsonData.Length != 0) {
-      output.WriteRawTag(26);
-      output.WriteString(JsonData);
+    if (Timestamp != 0L) {
+      output.WriteRawTag(24);
+      output.WriteInt64(Timestamp);
+    }
+    if (Nickname.Length != 0) {
+      output.WriteRawTag(34);
+      output.WriteString(Nickname);
+    }
+    if (Message.Length != 0) {
+      output.WriteRawTag(42);
+      output.WriteString(Message);
+    }
+    if (OtherJsonData.Length != 0) {
+      output.WriteRawTag(50);
+      output.WriteString(OtherJsonData);
     }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(ref output);
@@ -478,8 +283,17 @@ public sealed partial class ChatMessage : pb::IMessage<ChatMessage>
     if (Type != 0) {
       size += 1 + pb::CodedOutputStream.ComputeInt32Size(Type);
     }
-    if (JsonData.Length != 0) {
-      size += 1 + pb::CodedOutputStream.ComputeStringSize(JsonData);
+    if (Timestamp != 0L) {
+      size += 1 + pb::CodedOutputStream.ComputeInt64Size(Timestamp);
+    }
+    if (Nickname.Length != 0) {
+      size += 1 + pb::CodedOutputStream.ComputeStringSize(Nickname);
+    }
+    if (Message.Length != 0) {
+      size += 1 + pb::CodedOutputStream.ComputeStringSize(Message);
+    }
+    if (OtherJsonData.Length != 0) {
+      size += 1 + pb::CodedOutputStream.ComputeStringSize(OtherJsonData);
     }
     if (_unknownFields != null) {
       size += _unknownFields.CalculateSize();
@@ -499,8 +313,17 @@ public sealed partial class ChatMessage : pb::IMessage<ChatMessage>
     if (other.Type != 0) {
       Type = other.Type;
     }
-    if (other.JsonData.Length != 0) {
-      JsonData = other.JsonData;
+    if (other.Timestamp != 0L) {
+      Timestamp = other.Timestamp;
+    }
+    if (other.Nickname.Length != 0) {
+      Nickname = other.Nickname;
+    }
+    if (other.Message.Length != 0) {
+      Message = other.Message;
+    }
+    if (other.OtherJsonData.Length != 0) {
+      OtherJsonData = other.OtherJsonData;
     }
     _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
   }
@@ -525,8 +348,20 @@ public sealed partial class ChatMessage : pb::IMessage<ChatMessage>
           Type = input.ReadInt32();
           break;
         }
-        case 26: {
-          JsonData = input.ReadString();
+        case 24: {
+          Timestamp = input.ReadInt64();
+          break;
+        }
+        case 34: {
+          Nickname = input.ReadString();
+          break;
+        }
+        case 42: {
+          Message = input.ReadString();
+          break;
+        }
+        case 50: {
+          OtherJsonData = input.ReadString();
           break;
         }
       }
@@ -552,8 +387,20 @@ public sealed partial class ChatMessage : pb::IMessage<ChatMessage>
           Type = input.ReadInt32();
           break;
         }
-        case 26: {
-          JsonData = input.ReadString();
+        case 24: {
+          Timestamp = input.ReadInt64();
+          break;
+        }
+        case 34: {
+          Nickname = input.ReadString();
+          break;
+        }
+        case 42: {
+          Message = input.ReadString();
+          break;
+        }
+        case 50: {
+          OtherJsonData = input.ReadString();
           break;
         }
       }

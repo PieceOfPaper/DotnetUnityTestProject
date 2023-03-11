@@ -2,6 +2,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using Google.Protobuf;
 using Newtonsoft.Json.Linq;
 
 namespace Server_Chat
@@ -26,26 +27,16 @@ namespace Server_Chat
             m_BytesRead = await m_NetworkStream.ReadAsync(m_Buffer, 0, m_Buffer.Length);
             if (m_BytesRead > 0)
             {
-                var json = Encoding.UTF8.GetString(m_Buffer, 0, m_BytesRead);
-                Console.WriteLine($"Received message: {json}");
-
-                JObject jObj = JObject.Parse(json);
-                if (jObj != null)
+                ChatMessage chatMessage;
+                using (var memStream = new MemoryStream(m_Buffer, 0, m_BytesRead))
                 {
-                    jObj["timestamp"] = ((DateTimeOffset)System.DateTime.UtcNow).ToUnixTimeSeconds();
+                    chatMessage = ChatMessage.Parser.ParseFrom(memStream);
+                    chatMessage.ErrorCode = 0;
+                    chatMessage.Timestamp = ((DateTimeOffset)System.DateTime.UtcNow).ToUnixTimeSeconds();
 
-                    int channelID = 0;
-                    string? channelIDStr = jObj.Value<string>("channelID");
-                    int.TryParse(channelIDStr, out channelID);
-
-                    ChatClientManager.Instance.BrodcastMessage(jObj.ToString());
+                    ChatClientManager.Instance.BrodcastMessage(this, chatMessage);
                 }
-                else
-                {
-                    jObj = new JObject();
-                    jObj["errorCode"] = 1;
-                    SendMessage(jObj.ToString());
-                }
+                Console.WriteLine($"Received Message - ErrorCode:{chatMessage.ErrorCode}, Type:{chatMessage.Type}. TimeStamp:{chatMessage.Timestamp}, Nickname:{chatMessage.Nickname}, Message:{chatMessage.Message}");
             }
             else
             {
@@ -59,9 +50,9 @@ namespace Server_Chat
             Read();
         }
 
-        public void SendMessage(string message)
+        public void SendMessage(ChatMessage chatMessage)
         {
-            var response = Encoding.UTF8.GetBytes(message);
+            var response = chatMessage.ToByteArray();
             m_NetworkStream.Write(response, 0, response.Length);
         }
     }

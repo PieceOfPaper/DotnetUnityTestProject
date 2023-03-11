@@ -1,39 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Google.Protobuf;
 
 public class Server_Chat : ServerBase
 {
-    public System.Action<ChatPacket> OnReceiveMessage;
-
-    [System.Serializable]
-    public struct ChatPacket
-    {
-        [System.NonSerialized] public bool IsValid;
-
-        public int errorCode;
-        public int timestamp;
-        public int channelID;
-        public string nickname;
-        public string message;
-    }
+    public System.Action<ChatMessage> OnReceiveMessage;
 
     protected override void OnProcessReceivedPacket(byte[] bytes)
     {
-        string json = System.Text.Encoding.UTF8.GetString(bytes, 0, bytes.Length);
-        ChatPacket packet = default;
-        if (string.IsNullOrWhiteSpace(json) == false)
+        ChatMessage chatMessage;
+        using (var memStream = new System.IO.MemoryStream(bytes))
         {
-            packet = JsonUtility.FromJson<ChatPacket>(json);
-            packet.IsValid = true;
+            chatMessage = ChatMessage.Parser.ParseFrom(memStream);
         }
-        OnReceiveMessage?.Invoke(packet);
+        OnReceiveMessage?.Invoke(chatMessage);
     }
 
-    public void SendChatMessage(ChatPacket packet)
+    public void SendChatMessage(int type, string nickname, string message, string otherJsonData = null)
     {
-        var json = JsonUtility.ToJson(packet);
-        byte[] messageBytes = System.Text.Encoding.UTF8.GetBytes(json);
-        SendPacket(messageBytes);
+        var chatMessage = new ChatMessage();
+        chatMessage.Type = type;
+        chatMessage.Nickname = nickname;
+        chatMessage.Message = message;
+        chatMessage.OtherJsonData = otherJsonData == null ? string.Empty : otherJsonData;
+        SendPacket(chatMessage.ToByteArray());
     }
 }
