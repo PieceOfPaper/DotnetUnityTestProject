@@ -18,7 +18,7 @@ public class Server_Chat : ServerBase
 
     protected override void OnProcessReceivedPacket(byte[] bytes)
     {
-        string json = System.Text.Encoding.ASCII.GetString(bytes, 0, bytes.Length);
+        string json = System.Text.Encoding.UTF8.GetString(bytes, 0, bytes.Length);
         ChatPacket packet = default;
         if (string.IsNullOrWhiteSpace(json) == false)
         {
@@ -31,7 +31,7 @@ public class Server_Chat : ServerBase
     public void SendChatMessage(ChatPacket packet)
     {
         var json = JsonUtility.ToJson(packet);
-        byte[] messageBytes = System.Text.Encoding.ASCII.GetBytes(json);
+        byte[] messageBytes = System.Text.Encoding.UTF8.GetBytes(json);
         SendPacket(messageBytes);
     }
 }
