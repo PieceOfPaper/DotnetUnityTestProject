@@ -18,13 +18,13 @@ public class NetworkManager : SingletonTemplate<NetworkManager>
         }
     }
 
-    private Server_Chat m_ChatServer;
-    public Server_Chat ChatServer
+    private Server_Chat.Server m_ChatServer;
+    public Server_Chat.Server ChatServer
     {
         get
         {
             if (m_ChatServer == null)
-                m_ChatServer = ParentGameObject.AddComponent<Server_Chat>();
+                m_ChatServer = ParentGameObject.AddComponent<Server_Chat.Server>();
             return m_ChatServer;
         }
     }

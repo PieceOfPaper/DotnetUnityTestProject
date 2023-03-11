@@ -27,16 +27,23 @@ namespace Server_Chat
             m_BytesRead = await m_NetworkStream.ReadAsync(m_Buffer, 0, m_Buffer.Length);
             if (m_BytesRead > 0)
             {
-                ChatMessage chatMessage;
-                using (var memStream = new MemoryStream(m_Buffer, 0, m_BytesRead))
+                var packetType = (PacketType)ProtobufExtension.DeserializeType(m_Buffer);
+                switch(packetType)
                 {
-                    chatMessage = ChatMessage.Parser.ParseFrom(memStream);
-                    chatMessage.ErrorCode = 0;
-                    chatMessage.Timestamp = ((DateTimeOffset)System.DateTime.UtcNow).ToUnixTimeSeconds();
-
-                    ChatClientManager.Instance.BrodcastMessage(this, chatMessage);
+                    case PacketType.CS_Chat_Message:
+                        {
+                            var chatMessage = ProtobufExtension.DeserializeWithoutType<ChatMessage>(m_Buffer, m_BytesRead);
+                            chatMessage.ErrorCode = ErrorCode.SUCCESS;
+                            chatMessage.Timestamp = ((DateTimeOffset)System.DateTime.UtcNow).ToUnixTimeSeconds();
+                            Console.WriteLine($"Received Message - ErrorCode:{chatMessage.ErrorCode}, Type:{chatMessage.Type}. TimeStamp:{chatMessage.Timestamp}, Nickname:{chatMessage.Nickname}, Message:{chatMessage.Message}");
+                            
+                            ChatClientManager.Instance.BrodcastMessage(this, chatMessage);
+                        }
+                        break;
+                    default:
+                        //TODO - Error
+                        break;
                 }
-                Console.WriteLine($"Received Message - ErrorCode:{chatMessage.ErrorCode}, Type:{chatMessage.Type}. TimeStamp:{chatMessage.Timestamp}, Nickname:{chatMessage.Nickname}, Message:{chatMessage.Message}");
             }
             else
             {
@@ -52,7 +59,7 @@ namespace Server_Chat
 
         public void SendMessage(ChatMessage chatMessage)
         {
-            var response = chatMessage.ToByteArray();
+            var response = ProtobufExtension.SerializeWithType((ushort)PacketType.SC_Chat_Message, chatMessage);
             m_NetworkStream.Write(response, 0, response.Length);
         }
     }

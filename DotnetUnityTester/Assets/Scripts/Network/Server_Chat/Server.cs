@@ -3,27 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using Google.Protobuf;
 
-public class Server_Chat : ServerBase
+namespace Server_Chat
 {
-    public System.Action<ChatMessage> OnReceiveMessage;
-
-    protected override void OnProcessReceivedPacket(byte[] bytes)
+    public class Server : ServerBase
     {
-        ChatMessage chatMessage;
-        using (var memStream = new System.IO.MemoryStream(bytes))
+        public System.Action<ChatMessage> OnReceiveMessage;
+
+        protected override void OnProcessReceivedPacket(byte[] bytes)
         {
-            chatMessage = ChatMessage.Parser.ParseFrom(memStream);
+            var protocolType = (PacketType)ProtobufExtension.DeserializeType(bytes);
+            switch(protocolType)
+            {
+                case PacketType.SC_Chat_Message:
+                    {
+                        OnReceiveMessage?.Invoke(ProtobufExtension.DeserializeWithoutType<ChatMessage>(bytes));
+                    }
+                    break;
+            }
         }
-        OnReceiveMessage?.Invoke(chatMessage);
-    }
 
-    public void SendChatMessage(int type, string nickname, string message, string otherJsonData = null)
-    {
-        var chatMessage = new ChatMessage();
-        chatMessage.Type = type;
-        chatMessage.Nickname = nickname;
-        chatMessage.Message = message;
-        chatMessage.OtherJsonData = otherJsonData == null ? string.Empty : otherJsonData;
-        SendPacket(chatMessage.ToByteArray());
+        public void SendChatMessage(int type, string nickname, string message, string otherJsonData = null)
+        {
+            var chatMessage = new ChatMessage();
+            chatMessage.Type = type;
+            chatMessage.Nickname = nickname;
+            chatMessage.Message = message;
+            chatMessage.OtherJsonData = otherJsonData == null ? string.Empty : otherJsonData;
+            SendPacket(ProtobufExtension.SerializeWithType((ushort)PacketType.CS_Chat_Message, chatMessage));
+        }
     }
 }
