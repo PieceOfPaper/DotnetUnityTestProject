@@ -21,7 +21,7 @@ public class SimpleChatUI : MonoBehaviour
             m_TextMessages.text += '\n';
             m_TextMessages.text += string.Format("[{0}] {1}\n{2}", dateTime, packet.Nickname, packet.Message);
         };
-        NetworkManager.Instance.ChatServer.Connect("127.0.0.1", 12345);
+        NetworkManager.Instance.ChatServer.Connect("127.0.0.1", 10002);
     }
 
     public void OnClick_SendInput()

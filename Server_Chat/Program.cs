@@ -12,7 +12,7 @@ namespace Server_Chat
             Console.WriteLine("Starting chat server...");
 
             var ip = IPAddress.Any;
-            var port = 12345;
+            var port = 10002;
             var endpoint = new IPEndPoint(ip, port);
 
             var listener = new TcpListener(endpoint);
