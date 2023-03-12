@@ -1,10 +1,30 @@
 syntax = "proto3";
 
+option csharp_namespace = "Server_Chat";
+
+enum ErrorCode {
+    Success = 0;
+
+    //채팅관련 에러
+    ErrorChatMessageFail = 10000;
+    ErrorChatMessageInvalidChannelID = 10001;
+
+    //채널변경 관련 에러
+    ErrorChangeChannelFail = 20000;
+    ErrorChangeChannelAlreadyChanged = 20001;
+}
+
 message ChatMessage {
-    int32 errorCode = 1;
+    ErrorCode errorCode = 1;
     int32 type = 2;
     int64 timestamp = 3;
     string nickname = 4;
     string message = 5;
     string otherJsonData = 6;
+}
+
+message Change_Channel {
+    ErrorCode errorCode = 1;
+    int32 type = 2;
+    int32 channelId = 3;
 }

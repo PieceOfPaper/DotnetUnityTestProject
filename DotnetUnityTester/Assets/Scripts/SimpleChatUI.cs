@@ -29,10 +29,28 @@ public class SimpleChatUI : MonoBehaviour
         if (string.IsNullOrEmpty(m_InputField.text))
             return;
 
-        NetworkManager.Instance.ChatServer.SendChatMessage(
-            0,
-            m_InputNickname == null || string.IsNullOrWhiteSpace(m_InputNickname.text) ? "Unknown" : m_InputNickname.text,
-            m_InputField.text,
-            null);
+        var lowerText = m_InputField.text.ToLower();
+        if (lowerText.StartsWith("@changechannel "))
+        {
+            var splited = lowerText.Split(' ');
+            if (splited.Length < 3) return;
+
+            int type = 0;
+            int channelId = 0;
+
+            int.TryParse(splited[1], out type);
+            int.TryParse(splited[2], out channelId);
+
+            NetworkManager.Instance.ChatServer.SendChangeChannel(type, channelId);
+        }
+        else
+        {
+            NetworkManager.Instance.ChatServer.SendChatMessage(
+                0,
+                m_InputNickname == null || string.IsNullOrWhiteSpace(m_InputNickname.text) ? "Unknown" : m_InputNickname.text,
+                m_InputField.text,
+                null);
+
+        }
     }
 }

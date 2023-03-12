@@ -15,6 +15,9 @@ namespace Server_Chat
         private byte[] m_Buffer = new byte[1024];
         private int m_BytesRead = 0;
 
+        //key:type, value:channelId, channelId가 0이면 미사용.
+        private Dictionary<int, int> m_DicChannels = new Dictionary<int, int>();
+
         public ChatClient(long handle, NetworkStream networkStream)
         {
             Handle = handle;
@@ -27,17 +30,49 @@ namespace Server_Chat
             m_BytesRead = await m_NetworkStream.ReadAsync(m_Buffer, 0, m_Buffer.Length);
             if (m_BytesRead > 0)
             {
-                var packetType = (PacketType)ProtobufExtension.DeserializeType(m_Buffer);
+                var packetType = (PacketType)PacketSerializer.DeserializeType(m_Buffer);
                 switch(packetType)
                 {
                     case PacketType.CS_Chat_Message:
                         {
-                            var chatMessage = ProtobufExtension.DeserializeWithoutType<ChatMessage>(m_Buffer, m_BytesRead);
-                            chatMessage.ErrorCode = ErrorCode.SUCCESS;
+                            var chatMessage = PacketSerializer.DeserializeWithoutType<ChatMessage>(m_Buffer, m_BytesRead);
                             chatMessage.Timestamp = ((DateTimeOffset)System.DateTime.UtcNow).ToUnixTimeSeconds();
-                            Console.WriteLine($"Received Message - ErrorCode:{chatMessage.ErrorCode}, Type:{chatMessage.Type}. TimeStamp:{chatMessage.Timestamp}, Nickname:{chatMessage.Nickname}, Message:{chatMessage.Message}");
-                            
-                            ChatClientManager.Instance.BrodcastMessage(this, chatMessage);
+                            Console.WriteLine($"[ChatClient] CS_Chat_Message - Type:{chatMessage.Type}. TimeStamp:{chatMessage.Timestamp}, Nickname:{chatMessage.Nickname}, Message:{chatMessage.Message}");
+
+                            if (m_DicChannels.ContainsKey(chatMessage.Type) == false || m_DicChannels[chatMessage.Type] == 0)
+                            {
+                                chatMessage.ErrorCode = ErrorCode.ErrorChatMessageInvalidChannelId;
+                                SendChatMessage(chatMessage);
+                            }
+                            else
+                            {
+                                chatMessage.ErrorCode = ErrorCode.Success;
+                                if (ChatClientManager.Instance.BrodcastMessage(this, chatMessage) == false)
+                                {
+                                    chatMessage.ErrorCode = ErrorCode.ErrorChatMessageFail;
+                                    SendChatMessage(chatMessage);
+                                }
+                            }
+                        }
+                        break;
+                    case PacketType.CS_Change_Channel:
+                        {
+                            var data = PacketSerializer.DeserializeWithoutType<Change_Channel>(m_Buffer, m_BytesRead);
+                            Console.WriteLine($"[ChatClient] CS_Change_Channel - Type:{data.Type}. ChannelId:{data.ChannelId}");
+
+                            if (m_DicChannels.ContainsKey(data.Type) == false)
+                                m_DicChannels.Add(data.Type, 0);
+
+                            if (m_DicChannels[data.Type] == data.ChannelId)
+                            {
+                                SendTypeErrorCode((ushort)PacketType.SC_Change_Channel, ErrorCode.ErrorChangeChannelAlreadyChanged);
+                            }
+                            else
+                            {
+                                ChatClientManager.Instance.ChangeChannel(this, data.Type, m_DicChannels[data.Type], data.ChannelId);
+                                m_DicChannels[data.Type] = data.ChannelId;
+                                SendTypeErrorCode((ushort)PacketType.SC_Change_Channel, ErrorCode.Success);
+                            }
                         }
                         break;
                     default:
@@ -57,10 +92,20 @@ namespace Server_Chat
             Read();
         }
 
-        public void SendMessage(ChatMessage chatMessage)
+        public int GetChannelId(int type) => m_DicChannels.ContainsKey(type) ? m_DicChannels[type] : 0;
+
+        public void SendChatMessage(ChatMessage chatMessage)
         {
-            var response = ProtobufExtension.SerializeWithType((ushort)PacketType.SC_Chat_Message, chatMessage);
+            var response = PacketSerializer.SerializeWithType((ushort)PacketType.SC_Chat_Message, chatMessage);
             m_NetworkStream.Write(response, 0, response.Length);
+            Console.WriteLine($"[ChatClient] SC_Chat_Message - ErrorCode:{chatMessage.ErrorCode}, Type:{chatMessage.Type}");
+        }
+
+        public void SendTypeErrorCode(ushort type, ErrorCode errorCode)
+        {
+            var response = PacketSerializer.SerializeWithTypeErrorCode(type, errorCode);
+            m_NetworkStream.Write(response, 0, response.Length);
+            Console.WriteLine($"[ChatClient] {((PacketType)type)} - ErrorCode:{errorCode}");
         }
     }
 }

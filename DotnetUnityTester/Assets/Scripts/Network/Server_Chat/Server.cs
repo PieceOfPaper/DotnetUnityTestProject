@@ -11,12 +11,25 @@ namespace Server_Chat
 
         protected override void OnProcessReceivedPacket(byte[] bytes)
         {
-            var protocolType = (PacketType)ProtobufExtension.DeserializeType(bytes);
-            switch(protocolType)
+            var packetType = (PacketType)PacketSerializer.DeserializeType(bytes);
+            switch (packetType)
             {
                 case PacketType.SC_Chat_Message:
                     {
-                        OnReceiveMessage?.Invoke(ProtobufExtension.DeserializeWithoutType<ChatMessage>(bytes));
+                        var data = PacketSerializer.DeserializeWithoutType<ChatMessage>(bytes);
+                        if (data.ErrorCode != ErrorCode.Success)
+                        {
+                            UnityEngine.Debug.LogError("ChatMessage Error " + data.ErrorCode);
+                            return;
+                        }
+                        
+                        OnReceiveMessage?.Invoke(data);
+                    }
+                    break;
+                case PacketType.SC_Change_Channel:
+                    {
+                        var errorCode = PacketSerializer.DeserializeErrorCode(bytes);
+                        UnityEngine.Debug.Log("ChangeChannel " + errorCode);
                     }
                     break;
             }
@@ -29,7 +42,15 @@ namespace Server_Chat
             chatMessage.Nickname = nickname;
             chatMessage.Message = message;
             chatMessage.OtherJsonData = otherJsonData == null ? string.Empty : otherJsonData;
-            SendPacket(ProtobufExtension.SerializeWithType((ushort)PacketType.CS_Chat_Message, chatMessage));
+            SendPacket(PacketSerializer.SerializeWithType((ushort)PacketType.CS_Chat_Message, chatMessage));
+        }
+
+        public void SendChangeChannel(int type, int channelId)
+        {
+            var data = new Change_Channel();
+            data.Type = type;
+            data.ChannelId = channelId;
+            SendPacket(PacketSerializer.SerializeWithType((ushort)PacketType.CS_Change_Channel, data));
         }
     }
 }
